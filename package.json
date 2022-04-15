@@ -43,6 +43,9 @@
     "files": [
       "main",
       "renderer/out"
-    ]
+    ],
+    "win": {
+      "icon": "./public/icon.ico"
+    }
   }
 }

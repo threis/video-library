@@ -1,17 +1,22 @@
-// Native
 import { join } from 'path'
 import { format } from 'url'
 
-// Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron'
+import { BrowserWindow, app, ipcMain, IpcMainEvent, nativeImage } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
-// Prepare the renderer once the app is ready
+const icon = nativeImage.createFromPath(`${app.getAppPath()}/public/icon.ico`)
+
 app.on('ready', async () => {
 	await prepareNext('./renderer')
 
+
+	if (app.dock) {
+		app.dock.setIcon(icon)
+	}
+
 	const mainWindow = new BrowserWindow({
+		icon,
 		width: 800,
 		height: 600,
 		webPreferences: {
