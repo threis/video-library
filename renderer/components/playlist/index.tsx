@@ -1,7 +1,40 @@
-export function Playlist() {
+import { Box, Flex, Text } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Season } from '../../interface/season'
+import { Season as VideosList } from '../season'
+import { AiOutlineUnorderedList } from 'react-icons/ai'
+
+interface PlaylistProps {
+	seasonList: Season[]
+}
+export function Playlist({ seasonList }: PlaylistProps) {
+	const [selectedSeason, setSelectedSeason] = useState('')
+
 	return (
-		<div>
-            playlist
-		</div>
+		<Flex direction="column" ml=".4rem" h="100%" overflowX='hidden' w="300px">
+			{seasonList.map(item =>
+				<>
+					<Flex
+						key={item.description}
+						px="1rem"
+						py="1rem"
+						mb='.2rem'
+						cursor="pointer"
+						borderRadius='0.125rem'
+						bg="gray.700"
+						color="teal.400"
+						onClick={() => setSelectedSeason(item.description === selectedSeason ? '' : item.description)}
+					>
+						<Box fontSize="1.4rem" mr="0.4rem">
+							<AiOutlineUnorderedList />
+						</Box>
+						<Text>
+							{item.description}
+						</Text>
+					</Flex>
+					{selectedSeason === item.description && <VideosList videos={item.videos} playingVideoName="video 1" />}
+				</>
+			)}
+		</Flex>
 	)
 }

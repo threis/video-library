@@ -5,6 +5,7 @@ import { BrowserWindow, app, ipcMain, nativeImage, dialog } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 import listItem from './method/list-items'
+import { IpcMainEvent } from 'electron/main'
 
 const icon = nativeImage.createFromPath(`${app.getAppPath()}/public/icon.ico`)
 
@@ -46,13 +47,32 @@ app.on('ready', async () => {
 
 app.on('window-all-closed', app.quit)
 
-ipcMain.on('import-folder', async () => {
+ipcMain.on('import-folder', async (event: IpcMainEvent) => {
 	const { canceled, filePaths } = await dialog.showOpenDialog({
 		properties: ['openDirectory']
 	})
 
 	if (!canceled) {
-		const files = listItem(filePaths[0])
-		console.log(files.map(item => item.normalize('NFD').replace(/[^a-zA-Z0-9s -]/g, '')))
+
+		const sourcePath = filePaths[0]
+
+		const folders = listItem(sourcePath)
+		const completeSeason = folders.map(folder => {
+
+			const videos = listItem(`${sourcePath}/${folder}`).filter(video => {
+				const extension = (video.split('.').pop() || '').toLowerCase()
+				return extension.includes('mp4') || extension.includes('ogv') || extension.includes('webm')
+			})
+
+			return {
+				description: folder,
+				videos
+			}
+		})
+
+		event.sender.send('season-list', completeSeason)
+
+	} else {
+		console.log(event)
 	}
 })
