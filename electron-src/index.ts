@@ -26,6 +26,7 @@ app.on('ready', async () => {
 		webPreferences: {
 			nodeIntegration: false,
 			contextIsolation: false,
+			webSecurity: false,
 			preload: join(__dirname, 'preload.js'),
 		},
 	})
@@ -59,14 +60,17 @@ ipcMain.on('import-folder', async (event: IpcMainEvent) => {
 		const folders = listItem(sourcePath)
 		const completeSeason = folders.map(folder => {
 
-			const videos = listItem(`${sourcePath}/${folder}`).filter(video => {
+			const videos = listItem(`${sourcePath}\\${folder}`).filter(video => {
 				const extension = (video.split('.').pop() || '').toLowerCase()
 				return extension.includes('mp4') || extension.includes('ogv') || extension.includes('webm')
 			})
 
+			const path = `${sourcePath}\\${folder}`
+
 			return {
 				description: folder,
-				videos
+				videos,
+				path
 			}
 		})
 

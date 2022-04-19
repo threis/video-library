@@ -6,6 +6,7 @@ import { Video } from '../components/video'
 import { Season } from '../interface/season'
 
 export default function Player() {
+	const [video, setVideo] = useState('')
 	const [seasonList, setSeasonList] = useState<Season[]>([])
 
 	useEffect(() => {
@@ -14,15 +15,13 @@ export default function Player() {
 		})
 	}, [])
 
-	console.log(seasonList)
-
 	return (
 		<>
 			<Header />
 			<Box>
 				<Flex w="100%" my="6" maxW={1480} h="400px" mx="auto" px="6">
-					<Video />
-					<Playlist seasonList={seasonList} />
+					<Video video={video} />
+					<Playlist seasonList={seasonList} setVideo={setVideo} video={video} />
 				</Flex>
 			</Box>
 		</>

@@ -6,8 +6,10 @@ import { AiOutlineUnorderedList } from 'react-icons/ai'
 
 interface PlaylistProps {
 	seasonList: Season[]
+	setVideo: (video: string) => void
+	video: string
 }
-export function Playlist({ seasonList }: PlaylistProps) {
+export function Playlist({ seasonList, setVideo, video }: PlaylistProps) {
 	const [selectedSeason, setSelectedSeason] = useState('')
 
 	return (
@@ -15,7 +17,7 @@ export function Playlist({ seasonList }: PlaylistProps) {
 			{seasonList.map(item =>
 				<>
 					<Flex
-						key={item.description}
+						key={`${item.path}\\${item.description}`}
 						px="1rem"
 						py="1rem"
 						mb='.2rem'
@@ -32,7 +34,7 @@ export function Playlist({ seasonList }: PlaylistProps) {
 							{item.description}
 						</Text>
 					</Flex>
-					{selectedSeason === item.description && <VideosList videos={item.videos} playingVideoName="video 1" />}
+					{selectedSeason === item.description && <VideosList videos={item.videos} playbackName={video} setVideo={setVideo} path={item.path} />}
 				</>
 			)}
 		</Flex>

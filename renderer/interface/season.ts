@@ -1,4 +1,5 @@
 export type Season = {
     description: string,
-    videos: string[]
+    videos: string[],
+    path: string
 }

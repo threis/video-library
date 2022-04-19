@@ -4,16 +4,20 @@ import { AiFillPlayCircle, AiOutlinePlayCircle } from 'react-icons/ai'
 
 interface SeasonProps {
 	videos: string[]
-	playingVideoName?: string
+	playbackName?: string
+	setVideo: (video: string) => void
+	path: string
 }
 
-export function Season({ videos, playingVideoName }: SeasonProps) {
+export function Season({ path, videos, playbackName, setVideo }: SeasonProps) {
+
 	return (
 		<>
 			{
 				videos.map(video =>
 					<Flex
-						key={video}
+						onClick={() => setVideo(`${path}\\${video}`)}
+						key={`${path}\\${video}`}
 						p="1rem"
 						w="100%"
 						cursor="pointer"
@@ -24,7 +28,7 @@ export function Season({ videos, playingVideoName }: SeasonProps) {
 							filter: 'brightness(1.2)'
 						}}>
 						<Box fontSize="1.5rem" mr="0.4rem">
-							{playingVideoName === video ? <AiFillPlayCircle /> : <AiOutlinePlayCircle />}
+							{playbackName === video ? <AiFillPlayCircle /> : <AiOutlinePlayCircle />}
 						</Box>
 						{video}
 					</Flex>
