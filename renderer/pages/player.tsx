@@ -8,19 +8,25 @@ import { Season } from '../interface/season'
 export default function Player() {
 	const [video, setVideo] = useState('')
 	const [seasonList, setSeasonList] = useState<Season[]>([])
-
+	const [fullListVideos, setFullListVideos] = useState([])
 	useEffect(() => {
 		global.ipcRenderer.addListener('season-list', (_, data) => {
 			setSeasonList(data)
+			setFullListVideos(data.map(({ videos, path }) => {
+				return videos.map(video => `${path}\\${video}`)
+			}).flat())
 		})
+		
+
 	}, [])
+
 
 	return (
 		<>
 			<Header />
 			<Box>
 				<Flex w="100%" my="6" maxW={1480} h="400px" mx="auto" px="6">
-					<Video video={video} />
+					<Video video={video} setVideo={setVideo} fullListVideos={fullListVideos}/>
 					<Playlist seasonList={seasonList} setVideo={setVideo} video={video} />
 				</Flex>
 			</Box>

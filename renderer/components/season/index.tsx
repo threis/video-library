@@ -10,7 +10,6 @@ interface SeasonProps {
 }
 
 export function Season({ path, videos, playbackName, setVideo }: SeasonProps) {
-
 	return (
 		<>
 			{
@@ -28,7 +27,7 @@ export function Season({ path, videos, playbackName, setVideo }: SeasonProps) {
 							filter: 'brightness(1.2)'
 						}}>
 						<Box fontSize="1.5rem" mr="0.4rem">
-							{playbackName === video ? <AiFillPlayCircle /> : <AiOutlinePlayCircle />}
+							{playbackName === `${path}\\${video}` ? <AiFillPlayCircle /> : <AiOutlinePlayCircle />}
 						</Box>
 						{video}
 					</Flex>
