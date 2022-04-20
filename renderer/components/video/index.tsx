@@ -41,6 +41,7 @@ export function Video({ video, setVideo, fullListVideos }: VideoProps) {
 					width="100%"
 					height="100%"
 					controls
+					playing
 					url={video}
 				/>
 			)}
