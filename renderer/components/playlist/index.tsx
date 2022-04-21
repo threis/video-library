@@ -13,7 +13,7 @@ export function Playlist({ seasonList, setVideo, video }: PlaylistProps) {
 	const [selectedSeason, setSelectedSeason] = useState('')
 
 	return (
-		<Flex direction="column" ml=".4rem" h="100%" overflowX='hidden' w="300px">
+		<Flex direction="column" mr=".4rem" h="100%" overflowX='hidden' w="300px">
 			{seasonList.map(item =>
 				<>
 					<Flex

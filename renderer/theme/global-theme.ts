@@ -13,9 +13,11 @@ export const theme = extendTheme({
 			},
 			'::-webkit-scrollbar': {
 				width: '4px',
+				height: '4px'
 			},
 			'::-webkit-scrollbar-track': {
 				width: '6px',
+				height: '4px'
 			},
 			'::-webkit-scrollbar-thumb': {
 				background: 'gray.50',

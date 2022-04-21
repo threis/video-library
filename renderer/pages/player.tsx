@@ -24,10 +24,10 @@ export default function Player() {
 	return (
 		<>
 			<Header />
-			<Box>
-				<Flex w="100%" my="6" maxW={1480} h="400px" mx="auto" px="6">
-					<Video video={video} setVideo={setVideo} fullListVideos={fullListVideos}/>
+			<Box w="100vw">
+				<Flex my="6" h="calc(100vh-2rem)" w="100%" px="6">
 					<Playlist seasonList={seasonList} setVideo={setVideo} video={video} />
+					<Video video={video} setVideo={setVideo} fullListVideos={fullListVideos}/>
 				</Flex>
 			</Box>
 		</>
