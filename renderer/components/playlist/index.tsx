@@ -8,10 +8,10 @@ interface PlaylistProps {
 	seasonList: Season[]
 	setVideo: (video: string) => void
 	video: string
+	selectedSeason: string
+	handleSelectSeason: (season: string) => void
 }
-export function Playlist({ seasonList, setVideo, video }: PlaylistProps) {
-	const [selectedSeason, setSelectedSeason] = useState('')
-
+export function Playlist({ seasonList, setVideo, video, handleSelectSeason, selectedSeason }: PlaylistProps) {
 	return (
 		<Flex direction="column" mr=".4rem" h="100%" overflowX='hidden' w="300px">
 			{seasonList.map(item =>
@@ -25,7 +25,7 @@ export function Playlist({ seasonList, setVideo, video }: PlaylistProps) {
 						borderRadius='0.125rem'
 						bg="gray.700"
 						color="teal.400"
-						onClick={() => setSelectedSeason(item.description === selectedSeason ? '' : item.description)}
+						onClick={() => handleSelectSeason(item.description)}
 					>
 						<Box fontSize="1.4rem" mr="0.4rem">
 							<AiOutlineUnorderedList />

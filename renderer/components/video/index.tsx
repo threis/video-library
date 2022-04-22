@@ -75,6 +75,7 @@ export function Video({ video, setVideo, fullListVideos }: VideoProps) {
 						volume={volume}
 						playing={playing}
 						url={video}
+						muted
 					/>
 				</CustomControls>
 			)}
