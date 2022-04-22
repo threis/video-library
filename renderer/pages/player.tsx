@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Playlist } from '../components/playlist'
 import { Header } from '../components/template/header'
@@ -6,26 +7,27 @@ import { Video } from '../components/video'
 import { Season } from '../interface/season'
 
 export default function Player() {
+	const router = useRouter()
+	const { sourcePath } = router.query
 	const [video, setVideo] = useState('')
 	const [seasonList, setSeasonList] = useState<Season[]>([])
 	const [fullListVideos, setFullListVideos] = useState([])
 	const [selectedSeason, setSelectedSeason] = useState('')
 
 	useEffect(() => {
-		global.ipcRenderer.addListener('season-list', (_, data) => {
+		global.ipcRenderer.send('folder-import', sourcePath)
+		global.ipcRenderer.addListener('folder-import', (_, data) => {
 			setSeasonList(data)
 			setFullListVideos(data.map(({ videos, path }) => {
 				return videos.map(video => `${path}\\${video}`)
 			}).flat())
 		})
-
-
 	}, [])
 
 	useEffect(() => {
 		if (video) {
 			const seasonName = video.split('\\')[video.split('\\').length - 2]
-			if (selectedSeason !== seasonName){
+			if (selectedSeason !== seasonName) {
 				handleSelectSeason(seasonName)
 			}
 		}

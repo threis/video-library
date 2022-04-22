@@ -6,8 +6,11 @@ import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 import listItem from './method/list-items'
 import { IpcMainEvent } from 'electron/main'
+import { createDir, existDb, load, save } from './series-service'
 
 const icon = nativeImage.createFromPath(`${app.getAppPath()}/public/icon.ico`)
+
+const userDataPath = app.getPath('userData')
 
 app.on('ready', async () => {
 	await prepareNext('./renderer')
@@ -48,35 +51,58 @@ app.on('ready', async () => {
 
 app.on('window-all-closed', app.quit)
 
-ipcMain.on('import-folder', async (event: IpcMainEvent) => {
+ipcMain.on('get-folder', async (event: IpcMainEvent) => {
+
 	const { canceled, filePaths } = await dialog.showOpenDialog({
 		properties: ['openDirectory']
 	})
 
-	if (!canceled) {
+	event.sender.send('get-folder', !canceled ? filePaths[0] : '')
 
-		const sourcePath = filePaths[0]
+})
 
-		const folders = listItem(sourcePath)
-		const completeSeason = folders.map(folder => {
+ipcMain.on('folder-import', async (event: IpcMainEvent, sourcePath: string) => {
 
-			const videos = listItem(`${sourcePath}\\${folder}`).filter(video => {
-				const extension = (video.split('.').pop() || '').toLowerCase()
-				return extension.includes('mp4') || extension.includes('ogv') || extension.includes('webm')
-			})
+	const folders = listItem(sourcePath)
+	const completeSeason = folders.map(folder => {
 
-			const path = `${sourcePath}\\${folder}`
-
-			return {
-				description: folder,
-				videos,
-				path
-			}
+		const videos = listItem(`${sourcePath}\\${folder}`).filter(video => {
+			const extension = (video.split('.').pop() || '').toLowerCase()
+			return extension.includes('mp4') || extension.includes('ogv') || extension.includes('webm')
 		})
 
-		event.sender.send('season-list', completeSeason)
+		const path = `${sourcePath}\\${folder}`
 
-	} else {
-		console.log(event)
+		return {
+			description: folder,
+			videos,
+			path
+		}
+	})
+
+	event.sender.send('folder-import', completeSeason)
+
+
+})
+
+
+ipcMain.on('serie-save', async (event: IpcMainEvent, serie) => {
+
+	createDir(userDataPath)
+
+	let data: string[] = []
+
+	if (existDb(userDataPath)) {
+		const fileLoaded = load(userDataPath)
+		data = [...fileLoaded]
 	}
+	const serieList = [...data, serie]
+	save(userDataPath, serieList)
+	event.sender.send('serie-list', serieList)
+})
+
+ipcMain.on('serie-list', (event: IpcMainEvent) => {
+
+	const data = load(userDataPath)
+	event.sender.send('serie-list', data)
 })

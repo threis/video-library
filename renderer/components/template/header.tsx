@@ -13,16 +13,6 @@ export function Header() {
 					</a>
 				</Link>
 			</Stack>
-			<Stack w="5rem">
-				<Link href="/player">
-					<a>
-						<Text>video</Text>
-					</a>
-				</Link>
-			</Stack>
-			<Box w="5rem" onClick={() => global.ipcRenderer.send('import-folder')} cursor="pointer">
-				<Text>import</Text>
-			</Box>
 		</Stack>
 	)
 }
